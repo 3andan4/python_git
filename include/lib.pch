@@ -1,0 +1,11 @@
+//
+// Created by maximelb on 29/07/23.
+//
+
+#ifndef GITI_LIB_PCH_HPP
+    #define GITI_LIB_PCH_HPP
+    #include <boost/program_options.hpp>
+    #include <string>
+    #include <iostream>
+    #include <git2.h>
+#endif //GITI_LIB_PCH_HPP
