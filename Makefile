@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-BIN			:=    abstractVM
+BIN			:=    giti
 GXX			:=    g++
 EXT			:=    cpp
 
