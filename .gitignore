@@ -1,6 +1,7 @@
 *.c
 *.h
 report.*
+cmake-build-debug
 
 *.conf
 shell*
