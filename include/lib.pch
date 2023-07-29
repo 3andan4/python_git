@@ -6,6 +6,13 @@
     #define GITI_LIB_PCH_HPP
     #include <boost/program_options.hpp>
     #include <string>
+    #include <exception>
     #include <iostream>
+    #include <vector>
+    #include <map>
+    #include <unordered_map>
+    #include <filesystem>
+    #include <fstream>
+    #include <sstream>
     #include <git2.h>
 #endif //GITI_LIB_PCH_HPP
