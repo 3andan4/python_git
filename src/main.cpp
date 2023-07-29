@@ -7,7 +7,11 @@
 
 #include <iostream>
 #include "lib.pch"
+#include "Update.hpp"
 #include "GitiExceptions.hpp"
+
+// https://raw.githubusercontent.com/MaximeLeBesnerais/giti_super/main/versions_changelog.json
+// installation path: /home/$USER/.giti/versions_changelog.json
 
 bool isInGitRepo() {
     git_repository *repo = nullptr;
@@ -25,7 +29,7 @@ int main(int ac, char **av) {
     try{
         if (!isInGitRepo())
             throw GitiException(1);
-    // TODO: update necessity will be run here
+    auto changelog = Changelog(std::string(getenv("HOME")) + "/.giti/versions_changelog.json");
     if (ac == 1) {
         // TODO: GITI interactive mode
         return 0;
