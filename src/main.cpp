@@ -6,11 +6,26 @@
 */
 
 #include <iostream>
+#include "lib.pch"
+#include "GitiExceptions.hpp"
 
+bool isInGitRepo() {
+    git_repository *repo = nullptr;
+    int error = git_repository_open_ext(&repo, ".", 0, nullptr);
+
+    if (error == 0) {
+        git_repository_free(repo);
+        return true;
+    }
+    return false;
+}
 
 int main(int ac, char **av) {
+    git_libgit2_init(); // mandatory to use libgit2
+    try{
+        if (!isInGitRepo())
+            throw GitiException(1);
     // TODO: update necessity will be run here
-    // TODO: Check for git repo
     if (ac == 1) {
         // TODO: GITI interactive mode
         return 0;
@@ -20,5 +35,10 @@ int main(int ac, char **av) {
     // TODO: If special command, run it
     // TODO: If no special command, run default command using provided arguments
     std::cout << "Hello, World!" << std::endl;
+    } catch (GitiException &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
+    git_libgit2_shutdown(); // not mandatory as linux will do it for us, but it's good practice
     return 0;
 }
