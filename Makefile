@@ -18,7 +18,7 @@ SRC			=    $(shell find $(SRC_DIR) -type f -name "*.$(EXT)")
 OBJ			=    $(addprefix $(OBJ_DIR), $(notdir $(SRC:.$(EXT)=.o)))
 DEP			=    $(addprefix $(DEP_DIR), $(notdir $(SRC:.$(EXT)=.d)))
 
-CFLAGS		:=    -I$(INC_DIR) -W -Wall -Wextra
+CFLAGS		:=    -I$(INC_DIR) -W -Wall -Wextra -lgit2 -g3
 CXXFLAGS	:=    -MMD -MP -MF
 
 ifneq ($(wildcard $(OBJ_DIR) $(DEP_DIR)), $(OBJ_DIR) $(DEP_DIR))
