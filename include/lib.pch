@@ -5,6 +5,9 @@
 #ifndef GITI_LIB_PCH_HPP
     #define GITI_LIB_PCH_HPP
     #include <boost/program_options.hpp>
+    #include <boost/property_tree/ptree.hpp>
+    #include <boost/property_tree/json_parser.hpp>
+    #include <rapidjson/document.h>
     #include <string>
     #include <exception>
     #include <iostream>
@@ -14,5 +17,8 @@
     #include <filesystem>
     #include <fstream>
     #include <sstream>
+    #include <algorithm>
+    #include <regex>
+    #include <ctime>
     #include <git2.h>
 #endif //GITI_LIB_PCH_HPP
