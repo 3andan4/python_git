@@ -118,9 +118,9 @@
             }
             return *this;
         }
+        Version _currentVersion;
     protected:
     rapidjson::Document _data;
-    Version _currentVersion;
     Date _lastUpdateDate;
     Date _today;
     Date _LUCDate;
