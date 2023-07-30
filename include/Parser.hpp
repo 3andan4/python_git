@@ -13,8 +13,7 @@
         Parser() = default;
         ~Parser() = default;
         void parse(int ac, char **av);
-
-    private:
+        std::unordered_map<std::string, bool> _options;
     };
 
 #endif //GITI_PARSER_HPP
