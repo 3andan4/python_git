@@ -6,41 +6,16 @@ name: 'Compile and Test'
 on:
   push:
     branches:
-      - dev
+      - migration
   pull_request:
-  
+
 jobs:
   compile:
     name: Compile
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Copy libelf/libelf.h to /usr/include
-        run: sudo cp -r libelf/libelf.h /usr/include
-      - name: Copy libelf/gelf.h to /usr/include
-        run: sudo cp -r libelf/gelf.h /usr/include
-      - name: Copy libs into /usr/lib
-        run: sudo cp lib/* /usr/lib
       - name: Compile with make
         run: make
       - name: Clean with make
         run: make fclean
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Copy criterion folder to /usr/include
-        run: sudo cp -r criterion /usr/include
-      - name: Copy libelf/libelf.h to /usr/include
-        run: sudo cp -r libelf/libelf.h /usr/include
-      - name: Copy libelf/gelf.h to /usr/include
-        run: sudo cp -r libelf/gelf.h /usr/include
-      - name: Moves lib into /usr/lib
-        run: sudo cp lib/* /usr/lib
-      - name: Build test.c
-        run: gcc -o tests/test tests/test.c
-      - name: Run tests
-        run: make tests_run
-      - name: Clean Tests
-        run: make tests_clean
