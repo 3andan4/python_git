@@ -57,7 +57,7 @@ Date::Date(std::string date) {
     this->year = std::stoi(splitted[2]);
 }
 
-Changelog::Changelog(std::string d_cont, bool is_file = true)
+Changelog::Changelog(std::string d_cont, bool is_file)
 {
     std::string content;
     if (!is_file)

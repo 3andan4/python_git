@@ -94,9 +94,30 @@
      */
     class Changelog {
     public:
-        Changelog(std::string filename, bool is_file);
+        Changelog(std::string filename, bool is_file = true);
+        Changelog(const Changelog &rhs) {
+            std::string rhs_str = rhs._data.GetString();
+            _data.Parse(rhs_str.c_str());
+            _currentVersion = rhs._currentVersion;
+            _lastUpdateDate = rhs._lastUpdateDate;
+            _today = rhs._today;
+            _LUCDate = rhs._LUCDate;
+            _updatedSince = rhs._updatedSince;
+        }
         ~Changelog() = default;
         void display();
+        Changelog &operator=(const Changelog &rhs) {
+            std::string rhs_str = rhs._data.GetString();
+            if (this != &rhs) {
+                _data.Parse(rhs_str.c_str());
+                _currentVersion = rhs._currentVersion;
+                _lastUpdateDate = rhs._lastUpdateDate;
+                _today = rhs._today;
+                _LUCDate = rhs._LUCDate;
+                _updatedSince = rhs._updatedSince;
+            }
+            return *this;
+        }
     protected:
     rapidjson::Document _data;
     Version _currentVersion;
@@ -108,7 +129,7 @@
 
     class Update {
     public:
-        Update() = default;
+        Update(Changelog localChangelog, Changelog remoteChangelog): _localChangelog(localChangelog), _remoteChangelog(remoteChangelog) {};
         ~Update() = default;
         /**
          * @brief Fetch the remote changelog file to compare it with the local one
