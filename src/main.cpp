@@ -31,21 +31,28 @@ int main(int ac, char **av) {
     try{
         if (!isInGitRepo())
             throw GitiException(1);
-        Changelog changelog(JSON_LOCAL("/home/" + std::string(getenv("USER")) + "/."));
+        Changelog changelog(JSON_LOCAL_DEBUG);
+        std::cout << changelog._currentVersion.__str__() << std::endl;
         if (ac == 1) {
             git_libgit2_shutdown();
             return 0;
         }
         Parser here = Parser();
         here.parse(ac, av);
-        if (here._options["help"] || here._options["error"]) {
+        if (here._u_options["help"] || here._error["error"]) {
             git_libgit2_shutdown();
             std::cout << here._all_options << std::endl;
-            return (here._options["error"] ? 84 : 0);
+            return (here._error ? 84 : 0);
         }
-        // TODO: If special command, run it
-        // TODO: If no special command, run default command using provided arguments
-        std::cout << "Hello, World!" << std::endl;
+        if (here._utility) {
+            // TODO: add utility command → Not a commit command
+        }
+        if (here._tool) {
+            // TODO: add tool command → Is a commit command wrapper
+        }
+        if (here._comments) {
+            // TODO: add comments command → Is a direct commit command
+        }
     } catch (GitiException &e) {
         std::cerr << e.what() << std::endl;
         return 84;
