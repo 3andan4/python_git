@@ -81,7 +81,7 @@ void Parser::parse(int ac, char **av) {
         int count = std::count_if(_u_options.begin(), _u_options.end(), [](auto &option) { return option.second; });
         int count2 = std::count_if(_t_options.begin(), _t_options.end(), [](auto &option) { return option.second; });
 
-        if (count > 1 || count2 > 1 || count > 0 && count2 > 0) {
+        if (count > 1 || count2 > 1 || (count > 0 && count2 > 0)) {
             _error = true;
             return;
         }
