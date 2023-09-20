@@ -35,6 +35,9 @@ void Parser::parse(int ac, char **av) {
     _positional.add_options()
     ("Tag", po::value<std::string>()->required(), "Tag of the commit")
     ("Files", po::value<std::vector<std::string>>()->required(), "Files to commit");
+    po::positional_options_description _positional_options;
+    _positional_options.add("Tag", 1);
+    _positional_options.add("Files", -1);
     _type1.add(_optional).add(_positional);
 
     po::options_description _super("Super command");
@@ -53,7 +56,9 @@ void Parser::parse(int ac, char **av) {
     ("header,H", "Commit all header files (.h, .hpp)");
     _super.add(_type2).add(_type3);
 
-    _all_options.add(_type1).add(_super);
+    _opt.add(_super);
+    _opf.add(_type1);
+    _all.add(_opt).add(_opf);
 
     po::variables_map regular_vm;
     po::variables_map type2_and_3_vm;
@@ -62,7 +67,6 @@ void Parser::parse(int ac, char **av) {
         po::store(po::parse_command_line(ac, av, _super), type2_and_3_vm);
         po::notify(type2_and_3_vm);
     } catch (std::exception &e) {
-        std::cerr << "Error: " << e.what() << std::endl;
         _error = true;
     }
 

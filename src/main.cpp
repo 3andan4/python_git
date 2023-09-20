@@ -10,6 +10,7 @@
 #include "Update.hpp"
 #include "GitiExceptions.hpp"
 #include "StaticVar.hpp"
+#include "GitCommands.hpp"
 #include "Parser.hpp"
 
 // https://raw.githubusercontent.com/MaximeLeBesnerais/giti_super/main/versions_changelog.json
@@ -31,6 +32,15 @@ int main(int ac, char **av) {
     try{
         if (!isInGitRepo())
             throw GitiException(1);
+
+        // small test
+        GitAgent agent = GitAgent();
+        agent.loadStatus();
+        std::cout << "Found " << agent._gitStatus.size() << " files to commit:" << std::endl;
+        for (auto &i : agent._gitStatus)
+            std::cout << i << std::endl;
+        return 0;
+
         Changelog changelog(JSON_LOCAL_DEBUG);
         std::cout << changelog._currentVersion.__str__() << std::endl;
         if (ac == 1) {
@@ -41,17 +51,20 @@ int main(int ac, char **av) {
         here.parse(ac, av);
         if (here._u_options["help"] || here._error["error"]) {
             git_libgit2_shutdown();
-            std::cout << here._all_options << std::endl;
+            std::cout << here._all << std::endl;
             return (here._error ? 84 : 0);
         }
         if (here._utility) {
-            // TODO: add utility command → Not a commit command
+
         }
         if (here._tool) {
             // TODO: add tool command → Is a commit command wrapper
         }
         if (here._comments) {
-            // TODO: add comments command → Is a direct commit command
+            std::string tag = here._tag;
+            std::vector<std::string> files = here._files;
+            std::cout << "Title: " << here._c_options["title"] << std::endl;
+            std::cout << "Description: " << here._c_options["message"] << std::endl;
         }
     } catch (GitiException &e) {
         std::cerr << e.what() << std::endl;

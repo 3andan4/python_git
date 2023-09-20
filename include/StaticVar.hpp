@@ -10,6 +10,7 @@
 
 #ifndef GITI_STATICVAR_HPP
     #define GITI_STATICVAR_HPP
+    #define VERSION "3.0.0.0"
     #define JSON_LOCAL(home) home + "giti/versions_changelog.json"
     #define JSON_HOME JSON_LOCAL("/home" + std::string(getenv("USER")) + "/")
     #define JSON_LOCAL_DEBUG JSON_LOCAL(std::string("/home/perso/"))

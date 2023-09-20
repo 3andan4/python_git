@@ -18,7 +18,9 @@
         std::unordered_map<std::string, bool> _u_options;
         std::unordered_map<std::string, bool> _t_options;
         std::unordered_map<std::string, bool> _c_options;
-        po::options_description _all_options;
+        po::options_description _opt;  // Super command
+        po::options_description _opf;  // Regular command
+        po::options_description _all;
         bool _error = false;
         bool _utility = false;
         bool _tool = false;

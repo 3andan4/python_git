@@ -56,7 +56,7 @@ void GitAgent::commit(std::string const &message)
         throw GitiException(7);
 }
 
-void GitAgent::loadStatus()
+void GitAgent::loadStatus() // load UNSTAGED files to _gitStatus
 {
     git_status_list *status = nullptr;
     git_status_options opts = GIT_STATUS_OPTIONS_INIT;
@@ -67,7 +67,9 @@ void GitAgent::loadStatus()
     size_t status_count = git_status_list_entrycount(status);
     for (size_t i = 0; i < status_count; ++i) {
         const git_status_entry *entry = git_status_byindex(status, i);
-        _gitStatus.push_back(entry->head_to_index->new_file.path);
+        if (entry->index_to_workdir != nullptr) {
+            _gitStatus.push_back(entry->index_to_workdir->new_file.path);
+        }
     }
 
     git_status_list_free(status);
