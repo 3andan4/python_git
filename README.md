@@ -3,6 +3,10 @@ This is a simple C++ cit commit wrapper. It makes commit messages following the 
 
 This tool is not perfect.
 
+## INFO
+
+Developpement in C++ is currently on hold.
+
 ## Installation
 > No installation process yet.
 
