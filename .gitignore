@@ -138,3 +138,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .vscode/settings.json
+.stack-work/
+*~
+*.cabal
+*.lock
+giti*
