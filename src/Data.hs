@@ -42,3 +42,19 @@ type SpecialParser = (Utility, Tool)
 emptySpecialParser :: SpecialParser
 emptySpecialParser = (Utility False False False False False,
     Tool False False False False False)
+
+gitState :: String -> String
+gitState "M" = "modified"
+gitState "A" = "added"
+gitState "D" = "deleted"
+gitState "R" = "renamed"
+gitState "C" = "copied"
+gitState "U" = "unmerged"
+gitState "?" = "untracked"
+gitState "!" = "ignored"
+gitState _ = []
+
+data FileStatus = FileStatus {
+  status :: String,
+  file :: String
+} deriving (Show)
