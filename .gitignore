@@ -2,6 +2,8 @@
 *.h
 report.*
 
+.vscode
+
 *.conf
 shell*
 wallpaper*
