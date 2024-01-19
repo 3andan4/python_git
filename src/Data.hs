@@ -4,7 +4,9 @@ module Data (
     Tool(..),
     SpecialParser,
     emptySpecialParser,
-    CommandLine(..)
+    CommandLine(..),
+    gitState,
+    FileStatus(..)
     ) where
 
 data Skip = Skip {
@@ -43,18 +45,21 @@ emptySpecialParser :: SpecialParser
 emptySpecialParser = (Utility False False False False False,
     Tool False False False False False)
 
-gitState :: String -> String
-gitState "M" = "modified"
-gitState "A" = "added"
-gitState "D" = "deleted"
-gitState "R" = "renamed"
-gitState "C" = "copied"
-gitState "U" = "unmerged"
-gitState "?" = "untracked"
-gitState "!" = "ignored"
-gitState _ = []
+gitState :: String -> Either String String
+gitState "M" = Right "modified"
+gitState "A" = Right "added"
+gitState "D" = Right "deleted"
+gitState "R" = Right "renamed"
+gitState "C" = Right "copied"
+gitState "U" = Right "unmerged"
+gitState "?" = Right "untracked"
+gitState "!" = Right "ignored"
+gitState _ = Left "Unknown state"
 
 data FileStatus = FileStatus {
   status :: String,
   file :: String
-} deriving (Show)
+}
+
+instance Show FileStatus where
+    show (FileStatus s f) = f ++ ": " ++ s
