@@ -1,6 +1,6 @@
-name:                giti-haskell
+name:                giti
 version:             0.1.0.0
-github:              "githubuser/giti-haskell"
+github:              "githubuser/giti"
 license:             BSD-3-Clause
 author:              "Author name here"
 maintainer:          "example@example.com"
@@ -21,6 +21,8 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- directory
+- process
 
 ghc-options:
 - -Wall
@@ -37,7 +39,7 @@ library:
   source-dirs: src
 
 executables:
-  giti-haskell-exe:
+  giti:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -45,10 +47,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - giti-haskell
+    - giti
 
 tests:
-  giti-haskell-test:
+  giti-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -56,4 +58,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - giti-haskell
+    - giti
