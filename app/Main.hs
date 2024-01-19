@@ -5,10 +5,15 @@ import System.Environment (getArgs)
 import Parser
 import GitOps (gitPorcelain, buildObjects)
 
---  [["M", "app/Main.hs"], ["M", "src/Data.hs"]] => [("M", "app/Main.hs"), ("M", "src/Data.hs")]
+-- | Converts a list of lists of strings into a list of tuples.
+-- Each inner list is expected to have exactly two elements.
+-- The first element of each inner list becomes the first element of the tuple,
+-- and the second element becomes the second element of the tuple.
 makeTupple :: [[String]] -> [(String, String)]
 makeTupple = map (\ x -> (head x, last x))
 
+-- | Filters out the inner lists that do not have exactly two elements,
+-- and converts the remaining lists into tuples using the 'makeTupple' function.
 tuppleAll :: [[String]] -> [(String, String)]
 tuppleAll [] = []
 tuppleAll list@(x:xs)
