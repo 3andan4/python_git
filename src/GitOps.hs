@@ -1,7 +1,8 @@
 module GitOps (
     gitPorcelain,
     getState,
-    buildObjects
+    buildObjects,
+    gitCore
     ) where
 
 import Data
@@ -39,3 +40,10 @@ buildObjects ((x, y):xs) = case getState x of
     Right s -> case buildObjects xs of
         Left e -> Left e
         Right ss -> Right (FileStatus s y : ss)
+
+gitCore :: [String] -> [FileStatus] -> (Bool, String)
+gitCore [] _ = (True, "All files are valid")
+gitCore (filename:list) validFiles = case filter (\ x -> filename == file x) validFiles of
+    [] -> (False, "File " ++ filename ++ " is not valid")
+    [_] -> gitCore list validFiles
+    (_:_) -> (False, "File " ++ filename ++ " is not valid")
