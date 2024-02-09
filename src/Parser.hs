@@ -7,32 +7,48 @@ module Parser (
 
 import Data
 
+userOptionParserPt2 :: [String] -> SpecialParser -> Either String SpecialParser
+userOptionParserPt2 [] sp = Right sp
+userOptionParserPt2 (x:xs) (u, t) = case x of
+    "-i" -> userOptionParser xs (u {ignore = True}, t)
+    "--igit" -> userOptionParser xs (u {ignore = True}, t)
+    "-d" -> userOptionParser xs (u {delete = True}, t)
+    "--del" -> userOptionParser xs (u {delete = True}, t)
+    "-hd" -> userOptionParser xs (u {header = True}, t)
+    "--header" -> userOptionParser xs (u {header = True}, t)
+    _ -> toolOptionParser (x:xs) (u, t)
 -- | Parse the special arguments
-specialParserFunc :: [String] -> SpecialParser -> Either String SpecialParser
-specialParserFunc [] sp = Right sp
-specialParserFunc (x:xs) (u, t) = case x of
-    "-a" -> specialParserFunc xs (u {allFiles = True}, t)
-    "--all" -> specialParserFunc xs (u {allFiles = True}, t)
-    "-m" -> specialParserFunc xs (u {make = True}, t)
-    "--make" -> specialParserFunc xs (u {make = True}, t)
-    "-i" -> specialParserFunc xs (u {ignore = True}, t)
-    "--igit" -> specialParserFunc xs (u {ignore = True}, t)
-    "-d" -> specialParserFunc xs (u {delete = True}, t)
-    "--del" -> specialParserFunc xs (u {delete = True}, t)
-    "-hd" -> specialParserFunc xs (u {header = True}, t)
-    "--header" -> specialParserFunc xs (u {header = True}, t)
-    -- Tools
-    "-v" -> specialParserFunc xs (u, t {version = True})
-    "--version" -> specialParserFunc xs (u, t {version = True})
-    "-u" -> specialParserFunc xs (u, t {update = True})
-    "--update" -> specialParserFunc xs (u, t {update = True})
-    "-fu" -> specialParserFunc xs (u, t {forceUpdate = True})
-    "--force-update" -> specialParserFunc xs (u, t {forceUpdate = True})
-    "-r" -> specialParserFunc xs (u, t {remove = True})
-    "--remove" -> specialParserFunc xs (u, t {remove = True})
-    "-h" -> specialParserFunc xs (u, t {help = True})
-    "--help" -> specialParserFunc xs (u, t {help = True})
+userOptionParser :: [String] -> SpecialParser -> Either String SpecialParser
+userOptionParser [] sp = Right sp
+userOptionParser (x:xs) (u, t) = case x of
+    "-a" -> userOptionParser xs (u {allFiles = True}, t)
+    "--all" -> userOptionParser xs (u {allFiles = True}, t)
+    "-m" -> userOptionParser xs (u {make = True}, t)
+    "--make" -> userOptionParser xs (u {make = True}, t)
+    _ -> userOptionParserPt2 (x:xs) (u, t)
+
+toolOptionParserPt2 :: [String] -> SpecialParser -> Either String SpecialParser
+toolOptionParserPt2 [] sp = Right sp
+toolOptionParserPt2 (x:xs) (u, t) = case x of
+    "-fu" -> toolOptionParser xs (u, t {forceUpdate = True})
+    "--force-update" -> toolOptionParser xs (u, t {forceUpdate = True})
+    "-r" -> toolOptionParser xs (u, t {remove = True})
+    "--remove" -> toolOptionParser xs (u, t {remove = True})
+    "-h" -> toolOptionParser xs (u, t {help = True})
+    "--help" -> toolOptionParser xs (u, t {help = True})
     _ -> Left ("Unknown argument: " ++ x)
+
+toolOptionParser :: [String] -> SpecialParser -> Either String SpecialParser
+toolOptionParser [] sp = Right sp
+toolOptionParser (x:xs) (u, t) = case x of
+    "-v" -> toolOptionParser xs (u, t {version = True})
+    "--version" -> toolOptionParser xs (u, t {version = True})
+    "-u" -> toolOptionParser xs (u, t {update = True})
+    "--update" -> toolOptionParser xs (u, t {update = True})
+    _ -> toolOptionParserPt2 (x:xs) (u, t)
+
+specialParserFunc :: [String] -> SpecialParser -> Either String SpecialParser
+specialParserFunc = userOptionParser
 
 -- | Parse the type of the commit (feat, fix, etc.)
 typeParser :: [String] -> Either String (String, [String])
@@ -42,12 +58,13 @@ typeParser (x:xs) = Right (x, xs)
 -- | Parse the skip arguments: -nt, -nc, -nct, -ntc
 skipParser :: [String] -> Either String (Skip, [String])
 skipParser [] = Left "Not next argument"
-skipParser (x:xs) = case x of
-    "-nt" -> Right (Skip True False, xs)
-    "-nc" -> Right (Skip False True, xs)
-    "-nct" -> Right (Skip True True, xs)
-    "-ntc" -> Right (Skip True True, xs)
-    _ -> Right (Skip False False, x:xs)
+-- skipParser (x:xs) = case x of
+skipParser ("-nt":xs) = Right (Skip True False, xs)
+skipParser ("-nc":xs) = Right (Skip False True, xs)
+skipParser ("-nct":xs) = Right (Skip True True, xs)
+skipParser ("-ntc":xs) = Right (Skip True True, xs)
+skipParser (('-':e):_) = Left ("Unknown argument: " ++ e)
+skipParser (x:xs) = Right (Skip False False, x:xs)
 
 -- | Parse the regular arguments; usual giti usage
 commandLineParser :: [String] -> Either String CommandLine
