@@ -3,6 +3,7 @@
 report.*
 
 .vscode
+lambdananas
 
 *.conf
 shell*
