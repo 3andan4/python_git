@@ -19,7 +19,7 @@ module Data (
     emptySpecialParser,
     CommandLine(..),
     gitState,
-    FileStatus(..)|
+    FileStatus(..)
     ) where
 
 -- | data type that represents the skip arguments
