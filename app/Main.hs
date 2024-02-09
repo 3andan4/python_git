@@ -20,15 +20,33 @@ tuppleAll list@(x:xs)
     | length x == 2 = makeTupple list
     | otherwise = tuppleAll xs
 
-main :: IO ()
-main = do
-    args <- getArgs
-    case commandLineParser args of
-        Left err -> putStrLn err
-        Right cmd -> putStrLn (show (skip cmd) ++ " " ++ show (tag cmd) ++ " " ++ show (files cmd))
-    porcelain <- gitPorcelain
-    let objs = buildObjects $ tuppleAll $ map (words . dropWhile (==' ')) (lines porcelain)
-    case objs of
+-- | The 'parseArgs' function takes a list of command line arguments
+-- and parses them using 'commandLineParser'. If parsing is successful,
+-- it prints the 'skip', 'tag', and 'files' fields of the resulting command.
+-- If parsing fails, it prints an error message.
+parseArgs :: [String] -> IO ()
+parseArgs args = case commandLineParser args of
+    Left err -> putStrLn err
+    Right cmd -> putStrLn (show (skip cmd) ++ " " ++ show (tag cmd)
+        ++ " " ++ show (files cmd))
+
+-- | The 'buildAndPrintObjects' function takes a string representation
+-- of the output from 'git status --porcelain' and builds a list of objects
+-- from it using 'buildObjects' and 'tuppleAll'. If building is successful,
+-- it prints the resulting list of objects. If building fails, it prints an error message.
+buildAndPrintObjects :: String -> IO ()
+buildAndPrintObjects porcelain = 
+    let objs = buildObjects $ tuppleAll $
+            map (words . dropWhile (==' ')) (lines porcelain)
+    in case objs of
         Left err -> putStrLn err
         Right items -> print items
 
+-- | The 'main' function gets the command line arguments, parses them,
+-- gets the output from 'git status --porcelain', and builds and prints a list of objects from it.
+main :: IO ()
+main = do
+    args <- getArgs
+    parseArgs args
+    porcelain <- gitPorcelain
+    buildAndPrintObjects porcelain
